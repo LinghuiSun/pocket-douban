@@ -77,13 +77,15 @@
 ### 豆瓣接口说明
 豆瓣开发者网站有许多接口的说明文档，大家需要根据看豆瓣文档中接口的数据格式说明来进行开发页面。本应用涉及的接口文档如下：
 
+`2019-05-10更新`：**由于豆瓣开发者平台逐渐下架相关文档以及接口的访问权限**，现通过平台接口提供数据访问服务，具体接口以及使用样例请查看以下文档的内容。
+
 ### 图书相关
-- 拉取图书列表和搜索图书列表可使用下面的接口:
+- 【拉取图书列表和搜索图书列表】
 
   http://git.imweb.io/imweb-teacher/douban-api/blob/master/book.md
 
 ### 音乐相关
-- 拉取音乐列表和搜索音乐列表可使用下面的接口:
+- 【拉取音乐列表和搜索音乐列表】
 
   http://git.imweb.io/imweb-teacher/douban-api/blob/master/music.md
 
@@ -92,12 +94,12 @@
 - 【拉取电影 top 250 列表】
 
   http://git.imweb.io/imweb-teacher/douban-api/blob/master/movie_top.md
+
 - 【搜索电影】
 
   http://git.imweb.io/imweb-teacher/douban-api/blob/master/movie.md
 
 
-**注意：豆瓣 API 有权限和访问次数限制，单个 ip 限制每个小时 150 次。因此建议大家在开发时把拉取到的数据存到本地，避免超过次数。**
 
 
 ## Standard
