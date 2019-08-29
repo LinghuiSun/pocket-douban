@@ -1,0 +1,66 @@
+.item {
+    margin: 10px;
+    box-sizing: border-box;
+    display: flex;
+    border: 1px solid rgb(194, 193, 193);
+    border-radius: 2px;
+    height: 140px;
+}
+
+.item-intro {
+    box-sizing: border-box;
+    width: 70%;
+    flex: 1;
+    margin: 0.5rem 0;
+}
+
+.item-intro p {
+    margin: 0;
+}
+
+.item img {
+    width: 80px;
+    box-sizing: border-box;
+    margin: 0.7rem;
+
+}
+
+.book-tags span {
+    color: #fff;
+    background-color: rgb(214, 148, 24);
+    margin-right: 8px;
+    padding: 2px;
+}
+
+.movie-tags span {
+    color: #fff;
+    background-color: rgb(214, 24, 24);
+    margin-right: 8px;
+    padding: 2px;
+}
+
+.movie-hd {
+    font-size: 1.2rem;
+}
+
+.movie-staff {
+    font-size: 0.9rem;
+    color: rgb(128, 127, 127);
+}
+
+.item p {
+    white-space: nowrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+a {
+    color: #000;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #000;
+}

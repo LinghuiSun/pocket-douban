@@ -1,0 +1,25 @@
+.footer {
+    height: 80px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(235, 235, 235);
+    border-top: 1px solid rgb(235, 233, 233);
+}
+
+.footer-item {
+    color: rgb(54, 54, 54);
+}
+
+.footer-active {
+    color: rgb(34, 94, 224);
+}
+
+.footer-text {
+    font-size: 1rem;
+    margin: 0;
+}
