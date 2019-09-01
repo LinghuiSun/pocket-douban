@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import fetchJsonp from 'fetch-jsonp';
+import fetchData from '../api';
 require('es6-promise').polyfill();
 import BookDetail from './book';
 import MusicDetail from './music';
@@ -31,20 +31,17 @@ class Detail extends Component {
       type: type,
       id: id
     });
+
     const url = this.getUrl(id, type);
     const that = this;
-    fetchJsonp(url)
-      .then(function (response) {
-        return response.json()
-      }).then(function (json) {
-        if (that._isMounted) {
-          that.setState({
-            content: json.result
-          });
-        }
-      }).catch(function (ex) {
-        console.log('parsing failed', ex)
-      })
+    fetchData(url, function (json) {
+      if (that._isMounted) {
+        that.setState({
+          content: json.result
+        });
+      }
+    })
+
   }
   /**
    * 

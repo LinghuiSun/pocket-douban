@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Search from './search';
 import Footer from './footer';
 import List from './list';
-import fetchJsonp from 'fetch-jsonp';
 require('es6-promise').polyfill();
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner, faSync } from '@fortawesome/free-solid-svg-icons'
+import fetchData from '../api';
 class App extends Component {
   // Prevent React setState on unmounted Component
   _isMounted = false;
@@ -23,7 +23,6 @@ class App extends Component {
       page: 1
     };
     this.fetchMore = this.fetchMore.bind(this);
-    this.fetchData = this.fetchData.bind(this);
   }
   /**
    * 组件挂载后，通过fetchJsonp异步获取数据，更新state
@@ -35,67 +34,32 @@ class App extends Component {
     this.setState({
       category: returnType || 'book'
     });
-
-    this.fetchData('book');
-    this.fetchData('music');
-    this.fetchData('movie');
-  }
-  /**
-   * 
-   * @param {string} type 
-   * 异步获取数据存储在state的List中
-   */
-
-  fetchData(value) {
-    const type = value ? value : this.state.category;
-    const typeUrl = this.getUrl(type, 1);
-    const updateList = type + 'List';
     const that = this;
-    fetchJsonp(typeUrl)
-      .then(function (response) {
-        return response.json()
-      }).then(function (json) {
-        if (that._isMounted) {
-          that.setState({
-            [updateList]: json.result
-          });
-        }
-      }).catch(function (ex) {
-        console.log('parsing failed', ex)
-      })
-  }
 
-
-  fetchMore() {
-    const type = this.state.category;
-    const updateList = type + 'List';
-    if (this.state[updateList].length >= 100) {
-      this.setState({ hasMore: false });
-      return;
-    }
-    const nextPage = this.state.page + 1;
-    const typeUrl = this.getUrl(type, nextPage);
-    this.setState({
-      page: nextPage
+    const bookUrl = this.getUrl('book', 1);
+    const musicUrl = this.getUrl('music', 1);
+    const movieUrl = this.getUrl('movie', 1);
+    fetchData(bookUrl, function (json) {
+      that.setState({
+        bookList: json.result
+      });
     });
-    const that = this;
-    fetchJsonp(typeUrl)
-      .then(function (response) {
-        return response.json()
-      }).then(function (json) {
-        that.setState({
-          [updateList]: that.state[updateList].concat(json.result)
-        });
-      }).catch(function (ex) {
-        console.log('parsing failed', ex)
-      })
+    fetchData(musicUrl, function (json) {
+      that.setState({
+        musicList: json.result
+      });
+    });
+    fetchData(movieUrl, function (json) {
+      that.setState({
+        movieList: json.result
+      });
+    });
   }
-
   /**
-   * 
-   * @param {string} value 
-   * 根据输入的类别参数，返回编码后的url
-   */
+  * 
+  * @param {string} value 
+  * 根据输入的类别参数，返回编码后的url
+  */
   getUrl(value, page) {
     const queryItem = {
       book: '{id,title,author,rating{average},pubdate,tags{name},images{small}}}',
@@ -105,6 +69,32 @@ class App extends Component {
     const url = `http://sas.qq.com/cgi-bin/db/data?t=["ke_coding_${value}"]&q={ke_coding_${value}(_page:${page},_limit:4)${queryItem[value]}`;
     return encodeURI(url);
   }
+  /**
+   * 
+   * @param {string} type 
+   * 异步获取数据存储在state的List中
+   */
+  fetchMore() {
+    const type = this.state.category;
+    const updateList = type + 'List';
+    if (this.state[updateList].length >= 100) {
+      this.setState({ hasMore: false });
+      return;
+    }
+    const nextPage = this.state.page + 1;
+    this.setState({
+      page: nextPage
+    });
+    const that = this;
+    const url = this.getUrl(type, nextPage);
+    fetchData(url, function (json) {
+      that.setState({
+        [updateList]: that.state[updateList].concat(json.result)
+      });
+    })
+  }
+
+
   /**
    * 
    * @param {string} value 
@@ -140,7 +130,7 @@ class App extends Component {
           next={this.fetchMore}
           hasMore={this.state.hasMore}
           loader={<p style={{ textAlign: "center" }}>
-            加载中 <FontAwesomeIcon icon={faSpinner} size="x" />
+            加载中 <FontAwesomeIcon icon={faSpinner} size="1x" />
           </p>}
           height={500}
           endMessage={
@@ -148,14 +138,14 @@ class App extends Component {
               <b>到底啦</b>
             </p>
           }
-          refreshFunction={this.fetchData}
+          refreshFunction={fetchData}
           pullDownToRefresh
           pullDownToRefreshContent={
             <p style={{ textAlign: 'center' }}>&#8595; 上拉刷新</p>
           }
           releaseToRefreshContent={
             <p style={{ textAlign: 'center' }}>
-              释放刷新 <FontAwesomeIcon icon={faSync} size="x" />
+              释放刷新 <FontAwesomeIcon icon={faSync} size="1x" />
             </p>
           }
         >
